@@ -101,7 +101,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public String update(HttpServletRequest req, User user) {
         User anUser = userDao.findByUserId(user.getUserId());
 
