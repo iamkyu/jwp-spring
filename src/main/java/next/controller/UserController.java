@@ -1,10 +1,12 @@
 package next.controller;
 
+import next.annotation.LoginUser;
 import next.dao.UserDao;
 import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,14 +28,9 @@ public class UserController {
     private UserDao userDao = UserDao.getInstance();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView index(HttpSession session) throws SQLException {
-        if (!UserSessionUtils.isLogined(session)) {
-            return new ModelAndView("redirect:/users/loginForm");
-        }
-
-        ModelAndView mav = new ModelAndView("user/list");
-        mav.addObject("users", userDao.findAll());
-        return mav;
+    public String index(@LoginUser User loginUser, Model model) throws SQLException {
+        model.addAttribute("users", userDao.findAll());
+        return "user/list";
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)

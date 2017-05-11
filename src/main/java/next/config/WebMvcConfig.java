@@ -1,8 +1,10 @@
 package next.config;
 
+import next.support.context.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -11,9 +13,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import java.util.List;
+
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "next.controller" })
+@ComponentScan(basePackages = { "next" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private static final int CACHE_PERIOD = 31556926; // one year
     
@@ -24,6 +28,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         bean.setPrefix("/WEB-INF/jsp/");
         bean.setSuffix(".jsp");
         return bean;
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new LoginUserHandlerMethodArgumentResolver());
     }
 
     @Override
