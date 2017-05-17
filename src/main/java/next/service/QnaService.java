@@ -19,6 +19,11 @@ public class QnaService {
     private QnaService() {
     }
 
+    public QnaService(QuestionDao questionDao, AnswerDao answerDao) {
+        this.questionDao = questionDao;
+        this.answerDao = answerDao;
+    }
+
     public static QnaService getInstance() {
         if (qnaService == null) {
             qnaService = new QnaService();
