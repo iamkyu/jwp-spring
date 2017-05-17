@@ -1,6 +1,9 @@
 package next.model;
 
+import next.CannotOperateException;
+
 import java.util.Date;
+import java.util.List;
 
 public class Question {
     private long questionId;
@@ -83,6 +86,22 @@ public class Question {
     public void update(Question newQuestion) {
         this.title = newQuestion.title;
         this.contents = newQuestion.contents;
+    }
+
+
+
+    public void delete(User user, List<Answer> answers) throws CannotOperateException {
+        if (!isSameUser(user)) {
+            throw new CannotOperateException("다른 사용자가 쓴 글을 삭제할 수 없습니다.");
+        }
+
+        for (Answer answer : answers) {
+            if (!getWriter().equals(answer.getWriter())) {
+                throw new CannotOperateException("다른 사용자가 추가한 댓글이 존재해 삭제할 수 없습니다.");
+            }
+        }
+
+
     }
 
     @Override

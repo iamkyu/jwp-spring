@@ -1,17 +1,12 @@
 package next.service;
 
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-
-import java.util.Date;
-
+import com.google.common.collect.Lists;
 import next.CannotOperateException;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;
 import next.model.Question;
 import next.model.User;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +14,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import com.google.common.collect.Lists;
+import java.util.Date;
+import java.util.List;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QnaServiceTest {
@@ -34,7 +33,16 @@ public class QnaServiceTest {
     public void setup() {
         qnaService = new QnaService(questionDao, answerDao);
     }
-    
+
+    @Test
+    public void name() {
+        User user = newUser("iamkyu");
+        Question question = newQuestion(3L, "iamkyu");
+        List<Answer> answers = answerDao.findAllByQuestionId(1L);
+
+        question.delete(user, answers);
+    }
+
     @Test(expected = EmptyResultDataAccessException.class)
     public void deleteQuestion_없는_질문() throws Exception {
         when(questionDao.findById(1L)).thenReturn(null);
