@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QnaServiceTest {
-	@Mock
+    @Mock
     private QuestionDao questionDao;
     @Mock
     private AnswerDao answerDao;
@@ -32,7 +32,7 @@ public class QnaServiceTest {
 
     @Before
     public void setup() {
-    	qnaService = new QnaService(questionDao, answerDao);
+        qnaService = new QnaService(questionDao, answerDao);
     }
     
     @Test(expected = EmptyResultDataAccessException.class)
@@ -43,7 +43,7 @@ public class QnaServiceTest {
     
     @Test(expected = CannotOperateException.class)
     public void deleteQuestion_다른_사용자() throws Exception {
-    	Question question = newQuestion(1L, "javajigi");
+        Question question = newQuestion(1L, "javajigi");
         when(questionDao.findById(1L)).thenReturn(question);
         when(answerDao.findAllByQuestionId(1L)).thenReturn(Lists.newArrayList());
         qnaService.deleteQuestion(1L, newUser("sanjigi"));
@@ -51,7 +51,7 @@ public class QnaServiceTest {
 
     @Test
     public void deleteQuestion_같은_사용자_답변없음() throws Exception {
-    	Question question = newQuestion(1L, "javajigi");
+        Question question = newQuestion(1L, "javajigi");
         when(questionDao.findById(1L)).thenReturn(question);
         when(answerDao.findAllByQuestionId(1L)).thenReturn(Lists.newArrayList());
         qnaService.deleteQuestion(1L, newUser("javajigi"));
@@ -60,8 +60,8 @@ public class QnaServiceTest {
     
     @Test
     public void deleteQuestion_질문_답변_글쓴이_같음() throws Exception {
-    	String userId = "javajigi";
-		Question question = newQuestion(1L, userId);
+        String userId = "javajigi";
+        Question question = newQuestion(1L, userId);
         when(questionDao.findById(1L)).thenReturn(question);
         when(answerDao.findAllByQuestionId(1L)).thenReturn(Lists.newArrayList(newAnswer(userId), newAnswer(userId)));
         qnaService.deleteQuestion(1L, newUser(userId));
@@ -70,22 +70,22 @@ public class QnaServiceTest {
     
     @Test(expected = CannotOperateException.class)
     public void deleteQuestion_질문_답변_글쓴이_다름() throws Exception {
-    	String userId = "javajigi";
-		Question question = newQuestion(1L, userId);
+        String userId = "javajigi";
+        Question question = newQuestion(1L, userId);
         when(questionDao.findById(1L)).thenReturn(question);
         when(answerDao.findAllByQuestionId(1L)).thenReturn(Lists.newArrayList(newAnswer(userId), newAnswer("sanjigi")));
         qnaService.deleteQuestion(1L, newUser(userId));
     }
 
     private User newUser(String userId) {
-		return new User(userId, "password", "name", "test@sample.com");
-	}
+        return new User(userId, "password", "name", "test@sample.com");
+    }
     
     private Question newQuestion(long questionId, String userId) {
-    	return new Question(questionId, userId, "title", "contents", new Date(), 0);
+        return new Question(questionId, userId, "title", "contents", new Date(), 0);
     }
     
     private Answer newAnswer(String userId) {
-		return new Answer(userId, "contents", 3L);
-	}
+        return new Answer(userId, "contents", 3L);
+    }
 }
